@@ -12,7 +12,7 @@ Proyek Ujian Tengah Semester (UTS) Praktikum Pemrograman Mobile
 | **Nama** | M. Ariel Afriza |
 | **NIM** | 241401073 |
 | **Program Studi** | S1 Ilmu Komputer |
-| **Laboratorium** | Lab Pemrograman Mobile (IKLC USU) |
+| **Laboratorium** | Lab Pemrograman Mobile 5 |
 | **Asisten Lab** | Muhammad Dzakwan Attaqiy (DZK) |
 
 ---
