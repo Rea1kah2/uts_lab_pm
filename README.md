@@ -98,17 +98,19 @@ lib/
 - **Ikon:** Material Icons bawaan Flutter Framework.
 
 ### Mockup & Desain Prototype
-- **Link Mockup / Figma Prototype:** [Tautan Desain Figma](https://www.figma.com/) *(opsional / dapat disesuaikan)*
+- **Link Mockup / Prototype:** *(Opsional / Desain UI diimplementasikan secara dinamis & adaptif berbasis Material Design 3)*
 
-### Tangkapan Layar (Screenshots)
+### Tangkapan Layar Aplikasi (Screenshots)
 
-| Halaman Utama (Light Mode) | Halaman Kuis (Light Mode) | Halaman Hasil (Light Mode) |
+#### ☀️ Mode Terang (Light Mode)
+| Halaman Input Nama & Pembuka | Tampilan Kuis (Pilihan Ganda) | Interaksi Opsi Jawaban Terpilih |
 | :---: | :---: | :---: |
-| *(Screenshot Welcome Screen)* | *(Screenshot Quiz Screen)* | *(Screenshot Result Screen)* |
+| <img src="docs/screenshots/01_welcome_screen_light.png" width="300"/> | <img src="docs/screenshots/03_quiz_screen_light.png" width="300"/> | <img src="docs/screenshots/04_quiz_screen_answered_light.png" width="300"/> |
 
-| Halaman Utama (Dark Mode) | Halaman Kuis (Dark Mode) | Halaman Hasil (Dark Mode) |
+#### 🌙 Mode Gelap (Dark Mode) & Hasil Kuis
+| Halaman Kuis (Mode Gelap) | Halaman Skor Akhir & Statistik | Rincian Pembahasan Soal (Accordion) |
 | :---: | :---: | :---: |
-| *(Screenshot Welcome Dark)* | *(Screenshot Quiz Dark)* | *(Screenshot Result Dark)* |
+| <img src="docs/screenshots/05_quiz_screen_dark.png" width="300"/> | <img src="docs/screenshots/06_result_screen_dark.png" width="300"/> | <img src="docs/screenshots/07_result_review_dark_1.png" width="300"/> |
 
 ---
 
