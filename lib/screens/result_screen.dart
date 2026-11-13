@@ -56,8 +56,8 @@ class ResultScreen extends StatelessWidget {
                   // Ilustrasi Hasil
                   ConstrainedBox(
                     constraints: const BoxConstraints(
-                      maxHeight: 200,
-                      maxWidth: 240,
+                      maxHeight: 180,
+                      maxWidth: 220,
                     ),
                     child: Image.asset(
                       'assets/images/questions.png',
@@ -98,17 +98,38 @@ class ResultScreen extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
+                        // Badge Topik
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            quizProvider.selectedCategoryTitle,
+                            style: const TextStyle(
+                              fontFamily: AppStyles.primaryFont,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
                         Text(
-                          'Kerja Bagus, ${quizProvider.userName}!',
+                          'Mantap, ${quizProvider.userName}!',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontFamily: AppStyles.primaryFont,
                             fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         // Lingkaran Skor
                         Container(
                           width: 100,
@@ -146,12 +167,13 @@ class ResultScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 14),
                         Text(
                           quizProvider.performanceStatus,
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontFamily: AppStyles.primaryFont,
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
@@ -188,7 +210,9 @@ class ResultScreen extends StatelessWidget {
                         child: _buildStatCard(
                           context,
                           title: 'Akurasi',
-                          value: '${((correct / total) * 100).round()}%',
+                          value: total > 0
+                              ? '${((correct / total) * 100).round()}%'
+                              : '0%',
                           color: AppColors.primary,
                           icon: Icons.pie_chart_rounded,
                         ),
@@ -201,7 +225,7 @@ class ResultScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Pembahasan & Rincian Soal',
+                      'Pembahasan & Rincian Soal 💡',
                       style: AppStyles.headingSmall(
                         isDark
                             ? AppColors.darkTextPrimary
@@ -232,7 +256,7 @@ class ResultScreen extends StatelessWidget {
 
                   // Tombol Aksi
                   AppButton(
-                    text: 'Ulangi Kuis',
+                    text: 'Main Lagi di Topik Ini 🔄',
                     icon: Icons.refresh_rounded,
                     type: ButtonType.primary,
                     onPressed: () {
@@ -247,11 +271,11 @@ class ResultScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   AppButton(
-                    text: 'Kembali ke Menu Utama',
-                    icon: Icons.home_rounded,
+                    text: 'Pilih Topik Lain 🏠',
+                    icon: Icons.category_rounded,
                     type: ButtonType.secondary,
                     onPressed: () {
-                      quizProvider.restartQuiz(keepUserName: false);
+                      quizProvider.restartQuiz(keepUserName: true);
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
@@ -364,10 +388,10 @@ class ResultScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          'Soal #$questionNumber',
+          'Soal #$questionNumber • ${question.categoryLabel}',
           style: TextStyle(
             fontFamily: AppStyles.primaryFont,
-            fontSize: 14,
+            fontSize: 13,
             fontWeight: FontWeight.w700,
             color: isDark
                 ? AppColors.darkTextPrimary
@@ -387,92 +411,118 @@ class ResultScreen extends StatelessWidget {
           ),
         ),
         children: [
+          const Divider(height: 1),
+          const SizedBox(height: 12),
+
+          // Teks pertanyaan lengkap
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
               question.question,
-              style: AppStyles.bodyLarge(
-                isDark
+              style: TextStyle(
+                fontFamily: AppStyles.primaryFont,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: isDark
                     ? AppColors.darkTextPrimary
                     : AppColors.lightTextPrimary,
-              ).copyWith(fontWeight: FontWeight.w600),
+              ),
             ),
           ),
           const SizedBox(height: 12),
-          // Rincian Jawaban
-          ...List.generate(question.options.length, (optIndex) {
-            final isUserChoice = userAnswerIndex == optIndex;
-            final isTargetCorrect = question.correctAnswerIndex == optIndex;
 
-            Color optColor = isDark
-                ? AppColors.darkTextSecondary
-                : AppColors.lightTextSecondary;
-            FontWeight weight = FontWeight.w400;
-            Widget? trailingIcon;
+          // Review semua opsi
+          ...List.generate(question.options.length, (optIdx) {
+            final isUserChoice = userAnswerIndex == optIdx;
+            final isAnswerKey = question.correctAnswerIndex == optIdx;
 
-            if (isTargetCorrect) {
-              optColor = AppColors.success;
-              weight = FontWeight.w700;
-              trailingIcon = const Icon(
-                Icons.check_circle_rounded,
-                size: 16,
-                color: AppColors.success,
-              );
-            } else if (isUserChoice) {
-              optColor = AppColors.error;
-              weight = FontWeight.w700;
-              trailingIcon = const Icon(
-                Icons.cancel_rounded,
-                size: 16,
-                color: AppColors.error,
-              );
+            Color optBg = Colors.transparent;
+            Color optText =
+                isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
+            Border border = Border.all(
+              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+            );
+
+            if (isAnswerKey) {
+              optBg = isDark
+                  ? AppColors.success.withOpacity(0.15)
+                  : AppColors.successLight;
+              optText = AppColors.success;
+              border = Border.all(color: AppColors.success, width: 1.5);
+            } else if (isUserChoice && !isCorrect) {
+              optBg = isDark
+                  ? AppColors.error.withOpacity(0.15)
+                  : AppColors.errorLight;
+              optText = AppColors.error;
+              border = Border.all(color: AppColors.error, width: 1.5);
             }
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+            return Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: optBg,
+                borderRadius: BorderRadius.circular(10),
+                border: border,
+              ),
               child: Row(
                 children: [
                   Text(
-                    '${labels[optIndex]}. ',
+                    '${labels[optIdx]}. ',
                     style: TextStyle(
                       fontFamily: AppStyles.primaryFont,
                       fontSize: 13,
-                      fontWeight: weight,
-                      color: optColor,
+                      fontWeight: FontWeight.w700,
+                      color: optText,
                     ),
                   ),
                   Expanded(
                     child: Text(
-                      question.options[optIndex],
+                      question.options[optIdx],
                       style: TextStyle(
                         fontFamily: AppStyles.primaryFont,
                         fontSize: 13,
-                        fontWeight: weight,
-                        color: optColor,
+                        color: optText,
                       ),
                     ),
                   ),
-                  if (trailingIcon != null) trailingIcon,
+                  if (isAnswerKey)
+                    const Icon(
+                      Icons.check_circle_rounded,
+                      size: 18,
+                      color: AppColors.success,
+                    )
+                  else if (isUserChoice)
+                    const Icon(
+                      Icons.cancel_rounded,
+                      size: 18,
+                      color: AppColors.error,
+                    ),
                 ],
               ),
             );
           }),
-          const SizedBox(height: 10),
-          // Pembahasan
+          const SizedBox(height: 8),
+
+          // Penjelasan Pembahasan
           Container(
+            width: double.infinity,
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: isDark
-                  ? AppColors.darkBackground
-                  : const Color(0xFFF1F5F9),
+                  ? AppColors.primaryDark.withOpacity(0.3)
+                  : AppColors.primaryLight.withOpacity(0.5),
               borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: AppColors.primary.withOpacity(0.3),
+              ),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Icon(
-                  Icons.info_outline_rounded,
-                  size: 16,
+                  Icons.lightbulb_outline_rounded,
+                  size: 18,
                   color: AppColors.primary,
                 ),
                 const SizedBox(width: 8),
@@ -482,9 +532,10 @@ class ResultScreen extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: AppStyles.primaryFont,
                       fontSize: 12,
+                      height: 1.4,
                       color: isDark
-                          ? AppColors.darkTextSecondary
-                          : AppColors.lightTextSecondary,
+                          ? AppColors.darkTextPrimary
+                          : AppColors.lightTextPrimary,
                     ),
                   ),
                 ),

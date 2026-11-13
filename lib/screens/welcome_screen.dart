@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_styles.dart';
+import '../models/question_model.dart';
 import '../providers/quiz_provider.dart';
 import '../widgets/adaptive_container.dart';
 import '../widgets/app_button.dart';
@@ -49,6 +50,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Size screenSize = MediaQuery.of(context).size;
+    final quizProvider = context.watch<QuizProvider>();
 
     return Scaffold(
       appBar: AppBar(
@@ -73,30 +75,32 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 10),
-                  // Ilustrasi dinamis menyesuaikan orientasi dan layar
+                  // Ilustrasi Utama
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: screenSize.height * 0.28,
-                      maxWidth: 320,
+                      maxHeight: screenSize.height * 0.24,
+                      maxWidth: 280,
                     ),
                     child: Image.asset(
                       'assets/images/online_test.png',
                       fit: BoxFit.contain,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
 
-                  // Judul & Tagline
+                  // Judul & Tagline Santai (Anti AI-Slop)
                   Text(
-                    'Uji Kemampuanmu Bersama PilihDong!',
+                    'Seberapa Jago Coding Lo? Buktiin di Sini!',
                     textAlign: TextAlign.center,
                     style: AppStyles.headingLarge(
-                      isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                      isDark
+                          ? AppColors.darkTextPrimary
+                          : AppColors.lightTextPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Kuis Pilihan Ganda interaktif seputar Flutter, Pemrograman Mobile, dan Dart.',
+                    'Tebak-tebakan santai seputar Web, Flutter, Android, sampe iOS. Pilih topiknya, jawab soalnya, dan liat seberapa jago lo!',
                     textAlign: TextAlign.center,
                     style: AppStyles.bodyLarge(
                       isDark
@@ -104,13 +108,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           : AppColors.lightTextSecondary,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
-                  // Info Kartu Kuis
+                  // Info Kartu Kuis Ringkas
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
-                      color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                      color: isDark
+                          ? AppColors.darkSurface
+                          : AppColors.lightSurface,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: isDark
@@ -123,33 +132,33 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       children: [
                         _buildInfoItem(
                           context,
-                          icon: Icons.help_outline_rounded,
-                          title: '10 Soal',
+                          icon: Icons.quiz_outlined,
+                          title: '${quizProvider.totalQuestions} Soal',
                           subtitle: 'Pilihan Ganda',
                         ),
                         Container(
                           width: 1,
-                          height: 36,
+                          height: 32,
                           color: isDark
                               ? AppColors.darkBorder
                               : AppColors.lightBorder,
                         ),
                         _buildInfoItem(
                           context,
-                          icon: Icons.timer_outlined,
-                          title: 'Fleksibel',
+                          icon: Icons.coffee_outlined,
+                          title: 'Santai',
                           subtitle: 'Bebas Durasi',
                         ),
                         Container(
                           width: 1,
-                          height: 36,
+                          height: 32,
                           color: isDark
                               ? AppColors.darkBorder
                               : AppColors.lightBorder,
                         ),
                         _buildInfoItem(
                           context,
-                          icon: Icons.grade_outlined,
+                          icon: Icons.emoji_events_outlined,
                           title: 'Skala 100',
                           subtitle: 'Skor Akhir',
                         ),
@@ -162,7 +171,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Masukkan Nama Kamu',
+                      'Siapa nama panggilan lo?',
                       style: AppStyles.headingSmall(
                         isDark
                             ? AppColors.darkTextPrimary
@@ -183,7 +192,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           : AppColors.lightTextPrimary,
                     ),
                     decoration: InputDecoration(
-                      hintText: 'Contoh: Budi Santoso',
+                      hintText: 'Misal: Rian si Fullstack',
                       hintStyle: TextStyle(
                         fontFamily: AppStyles.primaryFont,
                         color: isDark
@@ -195,8 +204,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         color: AppColors.primary,
                       ),
                       filled: true,
-                      fillColor:
-                          isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                      fillColor: isDark
+                          ? AppColors.darkSurface
+                          : AppColors.lightSurface,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 16,
@@ -232,29 +242,151 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Nama tidak boleh kosong untuk memulai PilihDong';
+                        return 'Isi nama dulu dong, biar skor lo gak anonim!';
                       }
                       if (value.trim().length < 2) {
-                        return 'Nama minimal terdiri dari 2 karakter';
+                        return 'Nama minimal 2 karakter ya!';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 24),
 
-                  // Tombol Mulai
+                  // Category Selector (Pemilihan Topik)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Pilih Topik Kuis',
+                          style: AppStyles.headingSmall(
+                            isDark
+                                ? AppColors.darkTextPrimary
+                                : AppColors.lightTextPrimary,
+                          ),
+                        ),
+                        Text(
+                          quizProvider.selectedCategoryTitle,
+                          style: const TextStyle(
+                            fontFamily: AppStyles.primaryFont,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildCategoryGrid(context, quizProvider, isDark),
+                  const SizedBox(height: 28),
+
+                  // Tombol Mulai Kuis
                   AppButton(
-                    text: 'Mulai Kuis Sekarang',
+                    text: 'Gas, Mulai Kuis! 🚀',
                     icon: Icons.play_arrow_rounded,
                     onPressed: _startQuiz,
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCategoryGrid(
+    BuildContext context,
+    QuizProvider quizProvider,
+    bool isDark,
+  ) {
+    return Column(
+      children: QuestionBank.categories.map((category) {
+        final bool isSelected = quizProvider.selectedCategory == category.id;
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: InkWell(
+            onTap: () {
+              quizProvider.setCategory(category.id);
+            },
+            borderRadius: BorderRadius.circular(14),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColors.primary.withOpacity(isDark ? 0.2 : 0.1)
+                    : (isDark ? AppColors.darkSurface : AppColors.lightSurface),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: isSelected
+                      ? AppColors.primary
+                      : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                  width: isSelected ? 1.8 : 1.0,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    category.icon,
+                    style: const TextStyle(fontSize: 22),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          category.title,
+                          style: TextStyle(
+                            fontFamily: AppStyles.primaryFont,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: isSelected
+                                ? AppColors.primary
+                                : (isDark
+                                    ? AppColors.darkTextPrimary
+                                    : AppColors.lightTextPrimary),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          category.subtitle,
+                          style: TextStyle(
+                            fontFamily: AppStyles.primaryFont,
+                            fontSize: 11,
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.lightTextSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (isSelected)
+                    const Icon(
+                      Icons.check_circle_rounded,
+                      color: AppColors.primary,
+                      size: 20,
+                    )
+                  else
+                    Icon(
+                      Icons.radio_button_unchecked_rounded,
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
+                      size: 20,
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -275,7 +407,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             fontFamily: AppStyles.primaryFont,
             fontSize: 13,
             fontWeight: FontWeight.w700,
-            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+            color:
+                isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
           ),
         ),
         Text(
@@ -283,7 +416,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           style: TextStyle(
             fontFamily: AppStyles.primaryFont,
             fontSize: 11,
-            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.lightTextSecondary,
           ),
         ),
       ],

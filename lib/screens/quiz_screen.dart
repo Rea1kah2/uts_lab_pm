@@ -30,15 +30,15 @@ class QuizScreen extends StatelessWidget {
           backgroundColor:
               isDark ? AppColors.darkSurface : AppColors.lightSurface,
           title: Text(
-            'Kumpulkan Jawaban?',
+            'Udah Yakin Nih? 🤔',
             style: AppStyles.headingMedium(
               isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
             ),
           ),
           content: Text(
             unanswered > 0
-                ? 'Masih ada $unanswered soal yang belum dijawab. Apakah kamu yakin ingin menyelesaikan kuis sekarang?'
-                : 'Semua pertanyaan sudah kamu jawab. Kumpulkan sekarang untuk melihat skor akhir?',
+                ? 'Masih ada $unanswered soal yang belum lo jawab nih. Mau kumpulin sekarang atau periksa lagi?'
+                : 'Semua soal udah lo jawab mantap! Kumpulin sekarang buat intip skor lo?',
             style: AppStyles.bodyLarge(
               isDark
                   ? AppColors.darkTextSecondary
@@ -77,7 +77,7 @@ class QuizScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Ya, Kumpulkan'),
+              child: const Text('Ya, Kumpulin! 🚀'),
             ),
           ],
         );
@@ -97,13 +97,13 @@ class QuizScreen extends StatelessWidget {
           backgroundColor:
               isDark ? AppColors.darkSurface : AppColors.lightSurface,
           title: Text(
-            'Keluar dari Kuis?',
+            'Batalan Kuis? 🛑',
             style: AppStyles.headingMedium(
               isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
             ),
           ),
           content: Text(
-            'Progres kuis kamu tersimpan, namun kamu akan kembali ke halaman utama.',
+            'Progres jawaban lo di topik ini bakal ilang kalo lo balik ke halaman awal. Yakin mau cabut?',
             style: AppStyles.bodyLarge(
               isDark
                   ? AppColors.darkTextSecondary
@@ -113,7 +113,7 @@ class QuizScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Lanjutkan Kuis'),
+              child: const Text('Lanjut Kuis'),
             ),
             TextButton(
               onPressed: () {
@@ -121,7 +121,7 @@ class QuizScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
               child: const Text(
-                'Keluar',
+                'Cabut Aja',
                 style: TextStyle(color: AppColors.error),
               ),
             ),
@@ -129,6 +129,36 @@ class QuizScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Color _getCategoryColor(String category) {
+    switch (category) {
+      case 'web':
+        return const Color(0xFFF59E0B); // Amber
+      case 'flutter':
+        return const Color(0xFF0284C7); // Sky blue
+      case 'ios':
+        return const Color(0xFF8B5CF6); // Purple
+      case 'android':
+        return const Color(0xFF10B981); // Emerald
+      default:
+        return AppColors.primary;
+    }
+  }
+
+  String _getCategoryIcon(String category) {
+    switch (category) {
+      case 'web':
+        return '🌐';
+      case 'flutter':
+        return '💙';
+      case 'ios':
+        return '🍎';
+      case 'android':
+        return '🤖';
+      default:
+        return '⚡';
+    }
   }
 
   @override
@@ -148,32 +178,16 @@ class QuizScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          title: Text(
+            'PilihDong',
+            style: AppStyles.headingMedium(
+              isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+            ),
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
+            tooltip: 'Kembali',
             onPressed: () => _confirmExit(context),
-          ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Kuis Pemrograman Mobile',
-                style: AppStyles.headingSmall(
-                  isDark
-                      ? AppColors.darkTextPrimary
-                      : AppColors.lightTextPrimary,
-                ),
-              ),
-              Text(
-                'Peserta: ${quizProvider.userName}',
-                style: TextStyle(
-                  fontFamily: AppStyles.primaryFont,
-                  fontSize: 12,
-                  color: isDark
-                      ? AppColors.darkTextSecondary
-                      : AppColors.lightTextSecondary,
-                ),
-              ),
-            ],
           ),
           actions: const [
             ThemeToggleButton(),
@@ -183,15 +197,75 @@ class QuizScreen extends StatelessWidget {
         body: SafeArea(
           child: AdaptiveContainer(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Indikator Progres
+                const SizedBox(height: 8),
+
+                // Header Info Atas
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.person_outline_rounded,
+                          size: 16,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          quizProvider.userName.isNotEmpty
+                              ? quizProvider.userName
+                              : 'Player',
+                          style: TextStyle(
+                            fontFamily: AppStyles.primaryFont,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.lightTextSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? AppColors.darkSurface
+                            : AppColors.lightSurface,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: isDark
+                              ? AppColors.darkBorder
+                              : AppColors.lightBorder,
+                        ),
+                      ),
+                      child: Text(
+                        quizProvider.selectedCategoryTitle,
+                        style: const TextStyle(
+                          fontFamily: AppStyles.primaryFont,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+
+                // Progress Bar
                 QuizProgressBar(
                   currentIndex: quizProvider.currentIndex,
                   totalQuestions: quizProvider.totalQuestions,
                 ),
                 const SizedBox(height: 14),
 
-                // Daftar nomor soal (Quick Navigation Chips)
+                // Quick Navigation Chips
                 SizedBox(
                   height: 38,
                   child: ListView.builder(
@@ -266,14 +340,14 @@ class QuizScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Area Pertanyaan & Pilihan Ganda (Scrollable & Responsive)
+                // Area Pertanyaan & Pilihan Ganda
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Card Pertanyaan
+                        // Card Pertanyaan dengan Tag Kategori
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(18),
@@ -288,16 +362,49 @@ class QuizScreen extends StatelessWidget {
                                   : AppColors.lightBorder,
                             ),
                           ),
-                          child: Text(
-                            currentQ.question,
-                            style: AppStyles.bodyLarge(
-                              isDark
-                                  ? AppColors.darkTextPrimary
-                                  : AppColors.lightTextPrimary,
-                            ).copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Badge Kategori Soal
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: _getCategoryColor(currentQ.category)
+                                      .withOpacity(isDark ? 0.2 : 0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: _getCategoryColor(currentQ.category)
+                                        .withOpacity(0.3),
+                                  ),
+                                ),
+                                child: Text(
+                                  '${_getCategoryIcon(currentQ.category)} ${currentQ.categoryLabel}',
+                                  style: TextStyle(
+                                    fontFamily: AppStyles.primaryFont,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color: _getCategoryColor(currentQ.category),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+
+                              // Teks Pertanyaan
+                              Text(
+                                currentQ.question,
+                                style: AppStyles.bodyLarge(
+                                  isDark
+                                      ? AppColors.darkTextPrimary
+                                      : AppColors.lightTextPrimary,
+                                ).copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -351,7 +458,7 @@ class QuizScreen extends StatelessWidget {
                         flex: quizProvider.isFirstQuestion ? 2 : 1,
                         child: AppButton(
                           text: quizProvider.isLastQuestion
-                              ? 'Kumpulkan Kuis'
+                              ? 'Kumpulin Jawaban 🚀'
                               : 'Selanjutnya',
                           icon: quizProvider.isLastQuestion
                               ? Icons.check_circle_outline_rounded
