@@ -1,119 +1,148 @@
-# 📱 PilihDong - Aplikasi Kuis Pilihan Ganda Interaktif
+# 📱 PilihDong - Interactive Quiz App
 
-Aplikasi kuis pilihan ganda modern berbasis **Flutter** yang responsif, adaptif di berbagai dimensi layar (Mobile, Tablet, Web), dan kaya fitur interaktif. Dirancang dengan prinsip Clean Code, Reusable Components, dan Robust State Management.
+<p align="center">
+  <img src="assets/images/online_test.png" alt="PilihDong Logo" width="180"/>
+</p>
 
----
+<p align="center">
+  <strong>Aplikasi Kuis Pilihan Ganda Interaktif Modern Berbasis Flutter</strong>
+</p>
 
-## 🚀 Fitur Unggulan
-
-1. **Input & Validasi Nama Pengguna:**
-   - Validasi nama pengguna sebelum kuis dimulai.
-   - Nama pengguna tersimpan secara reaktif sepanjang sesi pengerjaan kuis.
-
-2. **Kuis Pilihan Ganda Interaktif:**
-   - Model data Dart modular (`Question` & `QuestionBank`).
-   - Visual feedback instan saat opsi jawaban dipilih.
-   - **Quick Navigation Chips**: Navigasi cepat berpindah langsung ke nomor soal tertentu kapan saja.
-
-3. **State Management Tahan Rotasi (Provider):**
-   - Menggunakan `QuizProvider` dengan pola `ChangeNotifier`.
-   - Progres pengerjaan, jawaban yang dipilih, indeks soal, dan skor **tidak akan hilang** saat orientasi layar dirotasi (portrait/landscape) atau saat berpindah antarhalaman.
-
-4. **Kalkulasi Skor Real-Time & Pembahasan Edukatif:**
-   - Skor otomatis dihitung dengan skala 0 - 100.
-   - Ringkasan hasil: Jumlah Benar, Jumlah Salah, dan Persentase Akurasi.
-   - **Fitur Pembahasan & Rincian Soal (Review Accordion)**: Menampilkan kunci jawaban benar serta penjelasan edukatif komprehensif pada setiap soal.
-
-5. **Dual Theme (Light & Dark Mode):**
-   - Dilengkapi `ThemeProvider` untuk beralih instan antara Mode Terang dan Mode Gelap via tombol toggle animasi di AppBar.
-
-6. **Adaptive & Responsive Layout:**
-   - Dibangun menggunakan komponen `AdaptiveContainer` dengan `BoxConstraints`, `SingleChildScrollView`, serta `LayoutBuilder` / `MediaQuery`.
-   - Tampilan tetap simetris, rapi, dan bebas *pixel overflow* saat dibuka di layar smartphone, tablet, maupun browser desktop.
-
-7. **Komponen Reusable Widget:**
-   - Seluruh elemen antarmuka yang berulang dipisahkan secara modular di `lib/widgets/`:
-     - `AppButton`: Tombol dinamis beraneka varian (primary, secondary, outline).
-     - `OptionCard`: Kartu pilihan ganda responsif dengan indikator centang/highlight.
-     - `QuizProgressBar`: Indikator progres pengerjaan kuis interaktif real-time.
-     - `AdaptiveContainer`: Kontainer pembatas lebar maksimal untuk adaptasi layar lebar.
-     - `ThemeToggleButton`: Tombol switch tema gelap dan terang.
+<p align="center">
+  <img src="https://img.shields.io/badge/Flutter-3.24.1-02569B?logo=flutter&logoColor=white" alt="Flutter Version"/>
+  <img src="https://img.shields.io/badge/Dart-3.5.1-0175C2?logo=dart&logoColor=white" alt="Dart Version"/>
+  <img src="https://img.shields.io/badge/State%20Management-Provider%206.1-4CAF50" alt="Provider"/>
+  <img src="https://img.shields.io/badge/Platform-Web%20%7C%20macOS%20%7C%20Android%20%7C%20iOS-orange" alt="Platform"/>
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"/>
+</p>
 
 ---
 
-## 📂 Struktur Direktori Proyek
+## 🌟 Tentang PilihDong
+
+**PilihDong** adalah aplikasi kuis interaktif modern yang dibangun menggunakan Flutter Framework. Aplikasi ini dirancang untuk menguji pemahaman seputar konsep dasar **Pemrograman Mobile**, **Flutter Widget Hierarchy**, **Lifecycle**, **State Management**, dan **Bahasa Pemrograman Dart**.
+
+Dengan mengusung desain yang bersih, minimalis, dan adaptif di berbagai ukuran layar (smartphone, tablet, maupun browser web), PilihDong menjamin pengalaman pengguna yang responsif, intuitif, dan tahan terhadap rotasi orientasi layar tanpa kehilangan progres kuis.
+
+---
+
+## 📸 Tangkapan Layar (Screenshots)
+
+### 🌓 Mode Terang (Light Mode)
+| 1. Halaman Awal | 2. Input Nama Pengguna | 3. Pengerjaan Soal |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/01_welcome_screen_light.png" width="260"/> | <img src="docs/screenshots/02_welcome_screen_input.png" width="260"/> | <img src="docs/screenshots/03_quiz_screen_light.png" width="260"/> |
+
+### 🌙 Mode Gelap (Dark Mode)
+| 4. Kuis Terjawab | 5. Hasil & Akurasi Skor | 6. Pembahasan & Rincian Soal |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/05_quiz_screen_dark.png" width="260"/> | <img src="docs/screenshots/06_result_screen_dark.png" width="260"/> | <img src="docs/screenshots/07_result_review_dark_1.png" width="260"/> |
+
+---
+
+## ✨ Fitur-Fitur Utama
+
+- 👤 **Input & Validasi Nama Pengguna:**
+  - Validasi reaktif sebelum kuis dimulai (mencegah input kosong atau kurang dari 2 karakter).
+  - Nama pengguna tersimpan secara reaktif dan terhubung ke halaman hasil evaluasi.
+
+- 🎯 **Kuis Interaktif Pilihan Ganda (10 Soal):**
+  - Bank soal modular mencakup topik fundamental: `Stateless vs StatefulWidget`, `pubspec.yaml`, `Hot Reload`, `Lifecycle initState()`, `Provider`, `Column vs Row`, `SingleChildScrollView`, `Null Safety (late)`, `Scaffold`, dan `dispose()`.
+  - Visual feedback instan pada opsi jawaban yang dipilih.
+
+- ⚡ **Quick Question Navigation Chips:**
+  - Bar navigasi nomor soal yang memungkinkan pengguna melompat ke nomor soal mana pun secara instan.
+  - Indikator status warna real-time untuk nomor soal yang sudah atau belum dijawab.
+
+- 🔄 **State Management Tahan Rotasi (Provider & ChangeNotifier):**
+  - Seluruh status pengerjaan kuis, opsi jawaban yang dipilih, indeks soal, dan skor **tidak akan ter-reset** saat layar perangkat dirotasi (portrait/landscape) atau berpindah antarhalaman.
+
+- 📊 **Kalkulasi Skor Real-Time & Pembahasan Edukatif (Review Accordion):**
+  - Kalkulasi otomatis skala 0 - 100 dengan metrik: *Jumlah Benar*, *Jumlah Salah*, dan *Akurasi (%)*.
+  - Accordion interaktif yang menampilkan kunci jawaban benar disertai pembahasan edukatif lengkap untuk setiap butir soal.
+
+- 🌗 **Dual Theme (Light & Dark Mode):**
+  - Switch tema instan melalui tombol toggle animasi di AppBar.
+  - Palet warna kontras yang ramah mata di berbagai kondisi pencahayaan.
+
+- 📱 **Adaptive & Responsive Layout:**
+  - Komponen `AdaptiveContainer` dengan `BoxConstraints` menjaga lebar tampilan optimal di tablet dan desktop browser agar tidak mengalami *pixel overflow*.
+
+---
+
+## 🏗️ Struktur Arsitektur Proyek
 
 ```text
 lib/
 ├── constants/
-│   ├── app_colors.dart         # Palet warna Light & Dark mode
-│   └── app_styles.dart         # Tipografi font Plus Jakarta Sans
+│   ├── app_colors.dart         # Sistem palet warna Light & Dark mode
+│   └── app_styles.dart         # Tipografi & style teks (Plus Jakarta Sans)
 ├── models/
-│   └── question_model.dart     # Model Question & Bank Soal Kuis
+│   └── question_model.dart     # Model Question data & Bank Soal Kuis
 ├── providers/
-│   ├── quiz_provider.dart      # State manajemen kuis (jawaban, skor, navigasi)
-│   └── theme_provider.dart     # State manajemen tema Light/Dark mode
+│   ├── quiz_provider.dart      # Business logic & state manajemen kuis
+│   └── theme_provider.dart     # State manajemen tema Light / Dark mode
 ├── widgets/
-│   ├── adaptive_container.dart # Container responsif mobile, tablet & web
-│   ├── app_button.dart         # Reusable dynamic button
-│   ├── option_card.dart        # Reusable card pilihan ganda
-│   ├── progress_bar.dart       # Reusable progress bar
-│   └── theme_toggle_button.dart# Reusable tombol switch tema
+│   ├── adaptive_container.dart # Wrapper pembatas layout responsif (mobile/tablet/web)
+│   ├── app_button.dart         # Komponen tombol reusable (primary, outline, secondary)
+│   ├── option_card.dart        # Kartu opsi jawaban dengan highlight interaktif
+│   ├── progress_bar.dart       # Bar indikator progres kuis
+│   └── theme_toggle_button.dart# Tombol toggle switch tema terang/gelap
 ├── screens/
-│   ├── welcome_screen.dart     # Halaman sambutan & input nama pengguna
-│   ├── quiz_screen.dart        # Halaman pengerjaan kuis
-│   └── result_screen.dart      # Halaman hasil & accordion pembahasan soal
-└── main.dart                   # Root MultiProvider & inisialisasi aplikasi PilihDong
+│   ├── welcome_screen.dart     # Layar awal sambutan & input nama pengguna
+│   ├── quiz_screen.dart        # Layar pengerjaan kuis & navigasi pertanyaan
+│   └── result_screen.dart      # Layar hasil skor, evaluasi & review accordion
+└── main.dart                   # Root MultiProvider & entry point aplikasi
 ```
 
 ---
 
-## 💻 Panduan Menjalankan di Lingkungan Lokal
+## 🚀 Panduan Menjalankan di Komputer Lokal
 
-### Prasyarat
-- **Flutter SDK**: ^3.24.0 (disertai Dart SDK ^3.5.0)
-- **Browser**: Google Chrome (untuk eksekusi Web)
-- *Opsional*: Xcode (untuk macOS Desktop / iOS Simulator) atau Android SDK (untuk Android)
+### 1. Prasyarat Sistem
+- **Flutter SDK**: `^3.24.1` (atau versi stabil terbaru)
+- **Dart SDK**: `^3.5.1`
+- **Google Chrome** (untuk menjalankan versi Web)
 
-### 1. Unduh Dependensi
-Buka terminal pada direktori proyek, lalu jalankan:
+### 2. Kloning & Pemasangan Dependensi
 ```bash
+# Unduh semua paket dependensi
 flutter pub get
 ```
 
-### 2. Jalankan di Web (Google Chrome)
-Rekomendasi tercepat untuk pengujian lokal:
-```bash
-flutter run -d chrome
-```
+### 3. Menjalankan Aplikasi
 
-### 3. Jalankan di Desktop (macOS)
-```bash
-flutter run -d macos
-```
+- **Jalankan di Web (Google Chrome):**
+  ```bash
+  flutter run -d chrome
+  ```
 
-### 4. Jalankan di Android Emulator / Device Fisik
-```bash
-flutter run -d android
-```
+- **Jalankan di macOS Desktop:**
+  ```bash
+  flutter run -d macos
+  ```
+
+- **Jalankan di Android (Device / Emulator):**
+  ```bash
+  flutter run -d android
+  ```
 
 ---
 
 ## 🧪 Pengujian & Analisis Kode
 
-Jalankan pengujian widget dan unit test:
+Jalankan test suite untuk memastikan semua komponen berfungsi dengan baik:
 ```bash
-flutter test
-```
-
-Jalankan static analyzer untuk memastikan kode bersih dari error dan warning:
-```bash
+# Menjalankan static analyzer
 flutter analyze
+
+# Menjalankan automated widget smoke test
+flutter test
 ```
 
 ---
 
-## 🎨 Kredit Aset & Sumber Daya
+## 🎨 Kredit Aset
 - **Ilustrasi Vektor:** [Storyset by Freepik](https://storyset.com/) (`online_test.png` dan `questions.png`).
 - **Font Kustom:**
   - [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans) oleh Tokotype (SIL Open Font License).
